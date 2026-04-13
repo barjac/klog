@@ -562,8 +562,10 @@ void MainWindow::connectDebugLogActions()
     connect(&qsoInUI, SIGNAL(debugLog(QString, QString, DebugLogLevel)),
             this, SLOT(logEvent(QString,QString,DebugLogLevel)));
 
-    //connect(&hamlib, SIGNAL(debugLog(QString, QString, DebugLogLevel)),
-    //        this, SLOT(logEvent(QString, QString, DebugLogLevel)));
+#ifndef QT_NO_DEBUG
+    connect(hamlib, SIGNAL(debugLog(QString, QString, DebugLogLevel)),
+            this, SLOT(logEvent(QString, QString, DebugLogLevel)));
+#endif
 
     connect(mainQSOEntryWidget, SIGNAL(debugLog(QString, QString, DebugLogLevel)),
             this, SLOT(logEvent(QString, QString, DebugLogLevel)) );
