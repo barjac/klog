@@ -644,8 +644,7 @@ bool HamLibClass::init(bool _active)
             if (probeRet == RIG_ENAVAIL || probeRet == RIG_ENIMPL)
             {
                 splitQuerySupported = false;
-                logEvent(Q_FUNC_INFO,
-                         "rig_get_split_vfo not supported — split polling disabled.", Warning);
+                qDebug() << Q_FUNC_INFO << "rig_get_split_vfo not supported — split polling disabled.";
             }
             else if (probeRet == RIG_OK && freqReadOk)
             {
@@ -657,13 +656,15 @@ bool HamLibClass::init(bool _active)
                     if (vfoReadOk)
                         rig_set_vfo(my_rig, vfoBefore);
                     splitQuerySupported = false;
-                    logEvent(Q_FUNC_INFO,
-                             QString("rig_get_split_vfo caused a VFO switch (freq %1 → %2 Hz) — "
-                                     "split polling disabled to prevent display flickering.")
-                                 .arg(freqBefore).arg(freqAfter),
-                             Warning);
+                    qDebug() << Q_FUNC_INFO
+                             << QString("rig_get_split_vfo caused a VFO switch (freq %1 -> %2 Hz) — "
+                                        "split polling disabled to prevent display flickering.")
+                                    .arg(freqBefore).arg(freqAfter);
                 }
-                // else: no VFO side-effect detected; splitQuerySupported stays true
+                else
+                {
+                    qDebug() << Q_FUNC_INFO << "rig_get_split_vfo probe OK — no VFO side-effect, split polling enabled.";
+                }
             }
         }
 
