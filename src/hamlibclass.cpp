@@ -637,21 +637,21 @@ bool HamLibClass::init(bool _active)
             const bool vfoReadOk  = (rig_get_vfo (my_rig, &vfoBefore)              == RIG_OK);
             const bool freqReadOk = (rig_get_freq(my_rig, RIG_VFO_CURR, &freqBefore) == RIG_OK);
 
-            qDebug() << Q_FUNC_INFO
-                     << QString("split VFO probe: vfoReadOk=%1 freqReadOk=%2 freqBefore=%3")
-                            .arg(vfoReadOk).arg(freqReadOk).arg(freqBefore);
+            logEvent(Q_FUNC_INFO,
+                     QString("split VFO probe: vfoReadOk=%1 freqReadOk=%2 freqBefore=%3")
+                         .arg(vfoReadOk).arg(freqReadOk).arg(freqBefore), Warning);
 
             split_t probeSplt  = RIG_SPLIT_OFF;
             vfo_t   probeTxVfo = RIG_VFO_SUB;
             const int probeRet = rig_get_split_vfo(my_rig, RIG_VFO_CURR, &probeSplt, &probeTxVfo);
 
-            qDebug() << Q_FUNC_INFO
-                     << QString("split VFO probe: rig_get_split_vfo returned %1").arg(probeRet);
+            logEvent(Q_FUNC_INFO,
+                     QString("split VFO probe: rig_get_split_vfo returned %1").arg(probeRet), Warning);
 
             if (probeRet == RIG_ENAVAIL || probeRet == RIG_ENIMPL)
             {
                 splitQuerySupported = false;
-                qDebug() << Q_FUNC_INFO << "split polling disabled: rig_get_split_vfo not supported.";
+                logEvent(Q_FUNC_INFO, "split polling disabled: rig_get_split_vfo not supported.", Warning);
             }
             else if (probeRet == RIG_OK && freqReadOk)
             {
@@ -663,20 +663,20 @@ bool HamLibClass::init(bool _active)
                     if (vfoReadOk)
                         rig_set_vfo(my_rig, vfoBefore);
                     splitQuerySupported = false;
-                    qDebug() << Q_FUNC_INFO
-                             << QString("split polling disabled: VFO switch detected (freq %1 -> %2 Hz).")
-                                    .arg(freqBefore).arg(freqAfter);
+                    logEvent(Q_FUNC_INFO,
+                             QString("split polling disabled: VFO switch detected (freq %1 -> %2 Hz).")
+                                 .arg(freqBefore).arg(freqAfter), Warning);
                 }
                 else
                 {
-                    qDebug() << Q_FUNC_INFO << "split polling enabled: no VFO side-effect detected.";
+                    logEvent(Q_FUNC_INFO, "split polling enabled: no VFO side-effect detected.", Warning);
                 }
             }
             else
             {
-                qDebug() << Q_FUNC_INFO
-                         << QString("split polling probe inconclusive: probeRet=%1 freqReadOk=%2 — leaving enabled.")
-                                .arg(probeRet).arg(freqReadOk);
+                logEvent(Q_FUNC_INFO,
+                         QString("split polling probe inconclusive: probeRet=%1 freqReadOk=%2 — leaving enabled.")
+                             .arg(probeRet).arg(freqReadOk), Warning);
             }
         }
 
